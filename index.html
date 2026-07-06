@@ -514,15 +514,30 @@
         </article>`).join("");
     }
 
-    // Try the public WooCommerce Store API for a live catalogue. The store serves
-    // REST via ?rest_route= (plain permalinks). This upgrades the grid when the page
-    // runs same-origin on jaynetix.ch; off-domain (CORS) it silently keeps the snapshot.
+    // Fetch the live WooCommerce catalogue, trying endpoints in order:
+    //   1. /api/products      — Vercel serverless proxy (CORS-safe, works on any host)
+    //   2. ?rest_route=…      — direct Store API (works same-origin on jaynetix.ch)
+    // Returns the raw Store API array, or null if none reachable (→ keep snapshot).
+    async function fetchLiveProducts() {
+      const endpoints = [
+        "/api/products",
+        STORE + "/?rest_route=/wc/store/v1/products&per_page=12&orderby=date&order=desc"
+      ];
+      for (const url of endpoints) {
+        try {
+          const res = await fetch(url, { headers: { "Accept": "application/json" } });
+          if (!res.ok) continue;
+          const data = await res.json();
+          if (Array.isArray(data) && data.length) return data;
+        } catch (e) { /* try next endpoint */ }
+      }
+      return null;
+    }
+
     async function connectStore() {
+      const data = await fetchLiveProducts();
+      if (!data) return; // offline / CORS / 404 everywhere — keep the snapshot
       try {
-        const res = await fetch(STORE + "/?rest_route=/wc/store/v1/products&per_page=12&orderby=date&order=desc", { headers: { "Accept": "application/json" } });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (!Array.isArray(data) || !data.length) return;
         const mapped = data.map(p => {
           const minor = (p.prices && p.prices.currency_minor_unit) || 2;
           const raw = p.prices && p.prices.price != null ? parseInt(p.prices.price, 10) : NaN;
