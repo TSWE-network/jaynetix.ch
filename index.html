@@ -15,7 +15,8 @@
   <link rel="preconnect" href="https://jaynetix.ch" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>document.documentElement.classList.add('js');</script>
   <style>
     :root {
       color-scheme: dark;
@@ -23,6 +24,7 @@
       --bg-2: #120e0a;
       --surface: #17120c;
       --surface-2: #1c160f;
+      --charcoal: #242017;  /* warm charcoal — newsletter band */
       --border: #2c2318;
       --border-soft: #221b13;
       --text: #f4ede1;      /* warm ivory */
@@ -33,9 +35,10 @@
       --oxblood: #7c2333;   /* secondary accent */
       --oxblood-light: #a13347;
       --radius: 6px;
+      --radius-btn: 3px;    /* squared, modern buttons */
       --maxw: 1200px;
       --font: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      --display: "Fraunces", Georgia, "Times New Roman", serif;
+      --display: "Bricolage Grotesque", "Archivo", Georgia, sans-serif;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -60,8 +63,8 @@
 
     .eyebrow {
       display: inline-flex; align-items: center; gap: .7rem;
-      font-family: var(--display); font-style: italic; font-optical-sizing: auto;
-      font-size: 0.9rem; letter-spacing: 0.06em; color: var(--gold); font-weight: 500;
+      font-family: var(--font); text-transform: uppercase;
+      font-size: 0.72rem; letter-spacing: 0.18em; color: var(--gold); font-weight: 600;
     }
     .eyebrow::before {
       content: ""; width: 26px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold));
@@ -71,11 +74,12 @@
 
     .btn {
       display: inline-flex; align-items: center; gap: 0.55rem;
-      font-family: var(--font); font-weight: 600; font-size: 0.92rem; line-height: 1;
-      letter-spacing: 0.02em; padding: 0.95rem 1.6rem; border-radius: 999px; cursor: pointer;
+      font-family: var(--font); font-weight: 700; font-size: 0.92rem; line-height: 1;
+      letter-spacing: 0.03em; padding: 0.95rem 1.6rem; border-radius: var(--radius-btn); cursor: pointer;
       border: 1px solid transparent; transition: transform .18s ease, background .25s ease, border-color .25s ease, color .25s ease, box-shadow .25s ease;
     }
-    .btn:active { transform: translateY(1px); }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:active { transform: translateY(0); }
     .btn svg { width: 17px; height: 17px; }
     .btn-primary { background: var(--gold); color: #1a1206; box-shadow: 0 10px 30px -12px rgba(201,163,78,.55); }
     .btn-primary:hover { background: var(--gold-light); box-shadow: 0 14px 34px -12px rgba(232,205,138,.6); }
@@ -122,7 +126,7 @@
     .header-cta { display: flex; align-items: center; gap: 1rem; }
     .cart-link {
       display: inline-flex; align-items: center; gap: .5rem; font-size: 0.88rem; color: var(--text);
-      border: 1px solid var(--border); border-radius: 999px; padding: .55rem 1rem; font-weight: 600;
+      border: 1px solid var(--border); border-radius: var(--radius-btn); padding: .55rem 1rem; font-weight: 600;
       transition: border-color .25s, color .25s;
     }
     .cart-link .ic-svg { font-size: 1.05rem; color: var(--gold); }
@@ -137,36 +141,117 @@
 
     /* ── Hero ────────────────────────────────────────────────── */
     .hero {
-      position: relative; min-height: min(90vh, 860px); display: flex; align-items: center;
+      position: relative; min-height: min(92vh, 900px); display: flex; align-items: center;
       overflow: hidden; border-bottom: 1px solid var(--border-soft); background: var(--bg);
     }
-    .hero-media { position: absolute; inset: 0 0 0 28%; z-index: 0; }
-    .hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 46%; }
+    .hero-media { position: absolute; inset: 0; z-index: 0; }
+    .hero-media img {
+      width: 100%; height: 100%; object-fit: cover; object-position: 68% 50%;
+      transform: scale(1.12); will-change: transform;
+    }
     .hero-scrim {
       position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background:
-        linear-gradient(90deg, var(--bg) 0%, var(--bg) 32%, rgba(10,8,6,0.82) 48%, rgba(10,8,6,0.25) 70%, transparent 88%),
-        radial-gradient(120% 130% at 12% 50%, transparent 55%, rgba(10,8,6,0.55) 100%),
-        linear-gradient(0deg, rgba(10,8,6,0.55), transparent 30%);
+        linear-gradient(90deg, var(--bg) 0%, rgba(10,8,6,0.86) 30%, rgba(10,8,6,0.36) 56%, transparent 82%),
+        linear-gradient(0deg, rgba(10,8,6,0.6), transparent 34%);
     }
-    .hero-inner { position: relative; z-index: 2; }
-    .hero-copy { max-width: 30rem; padding: 5rem 0; }
+    /* Moody procedural smoke — feTurbulence, screen-blended over the dark hero */
+    .hero-smoke {
+      position: absolute; inset: 0; z-index: 2; pointer-events: none;
+      mix-blend-mode: screen; will-change: transform;
+    }
+    .smoke { position: absolute; display: block; }
+    .smoke-fog {
+      inset: -18%; width: 136%; height: 136%; opacity: .3;
+      animation: smokeDriftA 40s ease-in-out infinite alternate;
+    }
+    .smoke-plume {
+      right: -8%; top: -14%; width: 78%; height: 128%; opacity: .42;
+      animation: smokeDriftB 27s ease-in-out infinite alternate;
+    }
+    @keyframes smokeDriftA {
+      from { transform: translate3d(-2%, 0, 0) scale(1.04); }
+      to   { transform: translate3d(3%, -3%, 0) scale(1.16); }
+    }
+    @keyframes smokeDriftB {
+      from { transform: translate3d(0, 2%, 0) scale(1.02); }
+      to   { transform: translate3d(-5%, -6%, 0) scale(1.14); }
+    }
+    .hero-inner { position: relative; z-index: 3; }
+    .hero-copy { max-width: 32rem; padding: 5rem 0; }
     .hero-copy h1 {
       font-family: var(--display); font-optical-sizing: auto;
-      font-size: clamp(2.6rem, 6vw, 4.6rem); line-height: 0.98; letter-spacing: -0.015em;
-      margin: 1.4rem 0 1.4rem; font-weight: 300; color: var(--text);
+      font-size: clamp(2.9rem, 6.6vw, 5.1rem); line-height: 0.95; letter-spacing: -0.03em;
+      margin: 1.3rem 0 1.4rem; font-weight: 800; color: var(--text);
     }
-    .hero-copy h1 em { font-style: italic; font-weight: 500; color: var(--gold); }
+    .hero-copy h1 .accent { color: var(--gold); }
     .hero-copy p.lead { font-size: 1.06rem; color: var(--muted); max-width: 44ch; margin: 0 0 2.2rem; }
     .hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; }
     .hero-scroll {
-      position: absolute; left: 24px; bottom: 1.6rem; z-index: 2;
-      font-family: var(--display); font-style: italic; font-size: .82rem; color: var(--faint);
-      display: inline-flex; align-items: center; gap: .5rem; letter-spacing: .04em;
+      position: absolute; left: 24px; bottom: 1.6rem; z-index: 3;
+      font-family: var(--font); text-transform: uppercase; font-size: .7rem; color: var(--faint);
+      display: inline-flex; align-items: center; gap: .5rem; letter-spacing: .18em;
     }
 
-    /* Trust strip */
-    .trust { border-bottom: 1px solid var(--border-soft); background: var(--bg-2); position: relative; }
+    /* ── Marquee / ticker band (below hero, diagonal skew) ─────── */
+    .marquee {
+      position: relative; z-index: 5; width: 100%;
+      transform: skewY(-2.2deg); transform-origin: center;
+      background: linear-gradient(90deg, #160f08, #0e0a06 50%, #160f08);
+      border-top: 1px solid rgba(201,163,78,.5); border-bottom: 1px solid rgba(201,163,78,.5);
+      overflow: hidden;
+    }
+    .marquee-inner { transform: skewY(2.2deg); padding: .9rem 0; overflow: hidden; }
+    .marquee-track {
+      display: inline-flex; flex-wrap: nowrap; white-space: nowrap; will-change: transform;
+      animation: marquee 28s linear infinite;
+    }
+    .marquee:hover .marquee-track { animation-play-state: paused; }
+    .marquee-item {
+      display: inline-flex; align-items: center; padding: 0 1.7rem;
+      font-family: var(--display); font-weight: 800; text-transform: uppercase;
+      font-size: .95rem; letter-spacing: .03em; color: var(--text); white-space: nowrap;
+    }
+    .marquee-item.gold { color: var(--gold); }
+    .marquee-item::after { content: "✦"; color: var(--oxblood-light); margin-left: 1.7rem; font-size: .7em; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── Stop-scroll brand statement (pinned) ──────────────────── */
+    .statement { position: relative; height: 175vh; background: var(--bg); }
+    .statement-sticky {
+      position: sticky; top: 0; height: 100vh; overflow: hidden;
+      display: flex; align-items: center; justify-content: center; text-align: center;
+    }
+    .statement-sticky::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(60% 60% at 50% 50%, rgba(201,163,78,.09), transparent 70%);
+    }
+    .statement-claim {
+      position: relative; font-family: var(--display); font-weight: 800;
+      font-size: clamp(2.2rem, 7.5vw, 5.6rem); letter-spacing: -0.035em; line-height: 1.0;
+      margin: 1rem 0 0; color: var(--text);
+    }
+    .statement-claim .accent { color: var(--gold); display: block; }
+
+    /* ── Scroll-reveal (gated to JS + motion-OK users) ─────────── */
+    @media (prefers-reduced-motion: no-preference) {
+      html.js .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+      html.js .reveal.is-visible { opacity: 1; transform: none; }
+      html.js .trust .item.reveal:nth-child(2) { transition-delay: .1s; }
+      html.js .trust .item.reveal:nth-child(3) { transition-delay: .2s; }
+      html.js .cats .cat.reveal:nth-child(2) { transition-delay: .07s; }
+      html.js .cats .cat.reveal:nth-child(3) { transition-delay: .14s; }
+      html.js .cats .cat.reveal:nth-child(4) { transition-delay: .21s; }
+      html.js #productGrid .product.reveal:nth-child(2) { transition-delay: .06s; }
+      html.js #productGrid .product.reveal:nth-child(3) { transition-delay: .12s; }
+      html.js #productGrid .product.reveal:nth-child(4) { transition-delay: .18s; }
+    }
+
+    /* Trust strip — angled bottom edge (diagonal divider) */
+    .trust {
+      background: var(--bg-2); position: relative;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - 22px));
+    }
     .trust .wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; padding: 0; }
     .trust .item { text-align: left; padding: 2.6rem 2rem; position: relative; }
     .trust .item + .item { border-left: 1px solid var(--border-soft); }
@@ -174,14 +259,14 @@
       display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center;
       border: 1px solid var(--border); border-radius: 50%; color: var(--gold); font-size: 1.25rem; margin-bottom: 1.1rem;
     }
-    .trust .item h3 { font-family: var(--display); font-size: 1.15rem; margin: 0 0 .4rem; font-weight: 500; letter-spacing: -.01em; }
+    .trust .item h3 { font-family: var(--display); font-size: 1.15rem; margin: 0 0 .4rem; font-weight: 700; letter-spacing: -.02em; }
     .trust .item p { font-size: 0.88rem; color: var(--muted); margin: 0; }
 
     /* Section */
     section { padding: 5.5rem 0; }
     .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 2.6rem; flex-wrap: wrap; }
-    .sec-head h2 { font-family: var(--display); font-optical-sizing: auto; font-size: clamp(1.9rem, 3.6vw, 2.9rem); letter-spacing: -0.02em; line-height: 1.04; margin: .6rem 0 0; font-weight: 300; }
-    .sec-head h2 em { font-style: italic; color: var(--gold); font-weight: 500; }
+    .sec-head h2 { font-family: var(--display); font-optical-sizing: auto; font-size: clamp(1.9rem, 3.6vw, 2.9rem); letter-spacing: -0.03em; line-height: 1.02; margin: .5rem 0 0; font-weight: 800; }
+    .sec-head h2 .accent { color: var(--gold); }
     .sec-head .link {
       color: var(--gold); font-weight: 600; font-size: 0.86rem; letter-spacing: .04em;
       display: inline-flex; align-items: center; gap: .4rem; transition: gap .2s, color .2s;
@@ -200,7 +285,7 @@
     .cat .catimg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.5; filter: saturate(.85); transition: opacity .35s, transform .6s; }
     .cat:hover .catimg { opacity: 0.72; transform: scale(1.06); }
     .cat::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,6,4,0.94) 8%, rgba(8,6,4,0.35) 55%, rgba(8,6,4,0.05)); }
-    .cat span { position: relative; z-index: 2; padding: 1.3rem; font-family: var(--display); font-weight: 500; font-size: 1.2rem; letter-spacing: -.01em; }
+    .cat span { position: relative; z-index: 2; padding: 1.3rem; font-family: var(--display); font-weight: 700; font-size: 1.2rem; letter-spacing: -.02em; }
     .cat span small { display: block; font-family: var(--font); color: var(--muted); font-weight: 400; font-size: 0.78rem; letter-spacing: .02em; margin-top: .35rem; }
 
     /* Products */
@@ -219,13 +304,13 @@
       color: var(--gold-light); font-weight: 600; padding: .28rem .6rem; border-radius: 999px;
       background: rgba(124,35,51,.16); border: 1px solid rgba(161,51,71,.4);
     }
-    .product .pname { font-family: var(--display); font-size: 1.08rem; font-weight: 500; line-height: 1.2; letter-spacing: -.01em; margin: .15rem 0 0; transition: color .2s; }
+    .product .pname { font-family: var(--display); font-size: 1.05rem; font-weight: 700; line-height: 1.2; letter-spacing: -.02em; margin: .15rem 0 0; transition: color .2s; }
     .product a:hover .pname { color: var(--gold); }
     .product .pdesc { font-size: 0.82rem; color: var(--faint); margin: 0; flex: 1; }
     .product .foot { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: .5rem; padding-top: .9rem; border-top: 1px solid var(--border-soft); }
-    .product .price { font-family: var(--display); font-size: 1.2rem; font-weight: 500; color: var(--gold); white-space: nowrap; }
+    .product .price { font-family: var(--display); font-size: 1.18rem; font-weight: 700; letter-spacing: -.01em; color: var(--gold); white-space: nowrap; }
     .product .add {
-      font-size: 0.78rem; font-weight: 600; letter-spacing: .01em; padding: .55rem .95rem; border-radius: 999px;
+      font-size: 0.78rem; font-weight: 700; letter-spacing: .02em; padding: .55rem .95rem; border-radius: var(--radius-btn);
       background: transparent; color: var(--gold); border: 1px solid var(--border); transition: background .22s, color .22s, border-color .22s;
     }
     .product .add:hover { background: var(--gold); color: #1a1206; border-color: var(--gold); }
@@ -243,8 +328,8 @@
       border-bottom: 1px solid var(--border-soft); background: transparent; overflow: hidden;
     }
     details.faq summary {
-      cursor: pointer; list-style: none; padding: 1.35rem .4rem; font-family: var(--display); font-weight: 500;
-      font-size: 1.12rem; letter-spacing: -.01em; display: flex; justify-content: space-between; gap: 1rem; align-items: center;
+      cursor: pointer; list-style: none; padding: 1.35rem .4rem; font-family: var(--display); font-weight: 700;
+      font-size: 1.1rem; letter-spacing: -.02em; display: flex; justify-content: space-between; gap: 1rem; align-items: center;
       transition: color .2s;
     }
     details.faq summary:hover { color: var(--gold); }
@@ -253,26 +338,36 @@
     details.faq[open] summary::after { transform: rotate(45deg); }
     details.faq .ans { padding: 0 .4rem 1.5rem; color: var(--muted); font-size: 0.95rem; max-width: 68ch; }
 
-    /* Newsletter */
-    .news {
-      position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-      padding: 4rem 2rem; text-align: center; overflow: hidden;
+    /* ── Newsletter — charcoal band, leaf watermark, split layout ── */
+    .news-band {
+      position: relative; background-color: var(--charcoal);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cg fill='%23c9a34e' fill-opacity='0.05' stroke='%23c9a34e' stroke-opacity='0.05' transform='translate(75 126)'%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z'/%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z' transform='rotate(30) scale(0.82)'/%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z' transform='rotate(-30) scale(0.82)'/%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z' transform='rotate(58) scale(0.6)'/%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z' transform='rotate(-58) scale(0.6)'/%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z' transform='rotate(82) scale(0.4)'/%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z' transform='rotate(-82) scale(0.4)'/%3E%3Cpath d='M0 0 L0 16' stroke-width='2' fill='none'/%3E%3C/g%3E%3C/svg%3E");
+      background-size: 150px 150px; overflow: hidden;
+      padding: 4.5rem 0 2rem;
+      clip-path: polygon(0 0, 100% 22px, 100% 100%, 0 100%);
     }
-    .news::before {
+    .news-band::before {
       content: ""; position: absolute; inset: 0; pointer-events: none;
-      background: radial-gradient(80% 120% at 50% 0%, rgba(201,163,78,.1), transparent 60%);
+      background: radial-gradient(90% 130% at 12% 0%, rgba(201,163,78,.08), transparent 55%);
     }
-    .news > * { position: relative; }
-    .news .eyebrow { justify-content: center; }
-    .news h2 { font-family: var(--display); font-weight: 300; margin: .7rem 0 .7rem; font-size: clamp(1.8rem, 3vw, 2.5rem); letter-spacing: -.02em; }
-    .news p { color: var(--muted); margin: 0 auto 1.9rem; max-width: 44ch; }
-    .news form { display: flex; gap: .6rem; max-width: 460px; margin: 0 auto; flex-wrap: wrap; }
-    .news input {
-      flex: 1; min-width: 200px; background: var(--bg); border: 1px solid var(--border); color: var(--text);
-      border-radius: 999px; padding: .95rem 1.3rem; font-size: 0.95rem; font-family: inherit;
+    .news-grid {
+      position: relative; display: grid; grid-template-columns: 1.05fr .95fr;
+      gap: 2.5rem; align-items: center;
     }
-    .news input::placeholder { color: var(--faint); }
-    .news input:focus { outline: none; border-color: var(--gold); }
+    .news-copy h2 { font-family: var(--display); font-weight: 800; letter-spacing: -.03em; font-size: clamp(1.9rem, 3.4vw, 2.8rem); margin: .5rem 0 .7rem; color: var(--text); line-height: 1.05; }
+    .news-copy p { color: var(--muted); margin: 0; max-width: 46ch; }
+    .news-form { display: flex; gap: .6rem; }
+    .news-form input {
+      flex: 1; min-width: 0; background: rgba(10,8,6,.55); border: 1px solid var(--border); color: var(--text);
+      border-radius: var(--radius-btn); padding: .95rem 1.2rem; font-size: 0.95rem; font-family: inherit;
+    }
+    .news-form input::placeholder { color: var(--faint); }
+    .news-form input:focus { outline: none; border-color: var(--gold); }
+    .news-form .btn { white-space: nowrap; }
+    .news-divider {
+      position: relative; height: 1px; margin-top: 3.5rem;
+      background: linear-gradient(90deg, transparent, rgba(201,163,78,.55), transparent);
+    }
 
     /* Footer */
     footer.site { border-top: 1px solid var(--border-soft); background: var(--bg-2); padding: 4rem 0 2rem; margin-top: 1rem; }
@@ -280,7 +375,7 @@
     footer.site img.logo { height: 40px; margin-bottom: 1.3rem; }
     footer.site p.about { color: var(--muted); font-size: 0.9rem; max-width: 34ch; }
     footer.site p.about b { color: var(--text); }
-    footer.site h4 { font-family: var(--display); font-style: italic; font-size: 0.9rem; letter-spacing: 0.02em; text-transform: none; color: var(--gold); margin: 0 0 1.1rem; font-weight: 500; }
+    footer.site h4 { font-family: var(--display); font-weight: 700; font-size: 0.95rem; letter-spacing: -0.01em; text-transform: none; color: var(--gold); margin: 0 0 1.1rem; }
     footer.site ul { list-style: none; padding: 0; margin: 0; }
     footer.site ul li { margin-bottom: .6rem; }
     footer.site ul a { color: var(--muted); font-size: 0.9rem; transition: color .2s; }
@@ -299,12 +394,14 @@
 
     /* Responsive */
     @media (max-width: 1000px) {
-      .hero-media { inset: 0 0 0 20%; }
+      .news-grid { grid-template-columns: 1fr; gap: 1.6rem; }
     }
     @media (max-width: 820px) {
       .hero { min-height: 82vh; align-items: flex-end; }
-      .hero-media { inset: 0; }
-      .hero-media img { object-position: 50% 30%; }
+      .hero-media img { object-position: 60% 38%; }
+      .statement { height: 150vh; }
+      .marquee-item { font-size: .82rem; padding: 0 1.3rem; }
+      .marquee-item::after { margin-left: 1.3rem; }
       .hero-scrim {
         background:
           linear-gradient(0deg, var(--bg) 4%, rgba(10,8,6,0.86) 34%, rgba(10,8,6,0.35) 62%, rgba(10,8,6,0.15) 100%),
@@ -342,6 +439,16 @@
       footer.site .cols { grid-template-columns: 1fr; }
       .header-cta .btn-primary { display: none; }
       .announce .wrap { gap: 1.2rem; }
+      .news-form { flex-wrap: wrap; }
+      .news-form .btn { width: 100%; justify-content: center; }
+      .statement { height: 130vh; }
+    }
+
+    /* ── Reduced motion: kill drift/scroll animation, keep it readable ── */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .marquee-track { animation: none; }
+      .smoke { animation: none; }
     }
   </style>
 </head>
@@ -394,13 +501,34 @@
   <!-- Hero -->
   <div class="hero" data-cms-zone="hero">
     <div class="hero-media">
-      <img src="images/hero-cannabis-gold.jpg" alt="Premium CBD Cannabis Blüte mit goldenem Licht" loading="eager">
+      <img src="images/hero-cannabis-real.jpg" alt="Gefrostete Premium CBD Cannabis Blüte im goldenen Licht" loading="eager" decoding="async" fetchpriority="high">
     </div>
     <div class="hero-scrim"></div>
+    <!-- Procedural moody smoke: faint full-hero fog + a denser plume near the bud -->
+    <div class="hero-smoke" aria-hidden="true">
+      <svg class="smoke smoke-fog" viewBox="0 0 600 600" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <filter id="smokeFog" x="-20%" y="-20%" width="140%" height="140%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="4" stitchTiles="stitch" result="n">
+            <animate attributeName="baseFrequency" dur="34s" values="0.011;0.016;0.011" repeatCount="indefinite"/>
+          </feTurbulence>
+          <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -1.1 0.95"/>
+        </filter>
+        <rect width="600" height="600" filter="url(#smokeFog)"/>
+      </svg>
+      <svg class="smoke smoke-plume" viewBox="0 0 400 700" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <filter id="smokePlume" x="-30%" y="-30%" width="160%" height="160%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.018 0.03" numOctaves="3" seed="11" stitchTiles="stitch" result="n">
+            <animate attributeName="baseFrequency" dur="22s" values="0.018 0.03;0.024 0.038;0.018 0.03" repeatCount="indefinite"/>
+          </feTurbulence>
+          <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -1.35 1.08"/>
+        </filter>
+        <rect width="400" height="700" filter="url(#smokePlume)"/>
+      </svg>
+    </div>
     <div class="hero-inner wrap">
       <div class="hero-copy">
         <span class="eyebrow">Schweizer CBD · Made in Basel</span>
-        <h1>Erlebe den ultimativen <em>CBD Genuss</em> mit unseren neuesten Cannabis Strains.</h1>
+        <h1>Erlebe den ultimativen <span class="accent">CBD Genuss</span> mit unseren neuesten Cannabis Strains.</h1>
         <p class="lead">Premium Indoor CBD Blüten, Hash, prerolled Joints und Hanf-Kosmetik — sorgfältig gezogen, laborgeprüft und mit Liebe in der Schweiz hergestellt.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#produkte">Produkte entdecken</a>
@@ -414,24 +542,33 @@
     </span>
   </div>
 
+  <!-- Revolving ticker beneath the hero -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-inner">
+      <div class="marquee-track">
+        <span class="marquee-item gold">Gratis Versand</span><span class="marquee-item">Laborgeprüft</span><span class="marquee-item gold">THC &lt; 1%</span><span class="marquee-item">Made in Basel</span><span class="marquee-item gold">100% Swiss Made</span><span class="marquee-item">Indoor CBD Blüten</span><span class="marquee-item gold">Tabakfrei</span><span class="marquee-item">Premium Qualität</span><span class="marquee-item gold">Gratis Versand</span><span class="marquee-item">Laborgeprüft</span><span class="marquee-item gold">THC &lt; 1%</span><span class="marquee-item">Made in Basel</span><span class="marquee-item gold">100% Swiss Made</span><span class="marquee-item">Indoor CBD Blüten</span><span class="marquee-item gold">Tabakfrei</span><span class="marquee-item">Premium Qualität</span>
+      </div>
+    </div>
+  </div>
+
   <!-- Trust -->
   <div class="trust">
     <div class="wrap">
-      <div class="item">
+      <div class="item reveal">
         <div class="ic">
           <svg class="ic-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 17V6a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h1"/><path d="M14 9h4l3 3v5a1 1 0 0 1-1 1h-1"/><path d="M9 18h5"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
         </div>
         <h3>Gratis Versand</h3>
         <p>Profitiere von unserem Gratis Versand. Deine Ware ist in 3–4 Tagen bei dir.</p>
       </div>
-      <div class="item">
+      <div class="item reveal">
         <div class="ic">
           <svg class="ic-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 0 1 4 11.5 8.38 8.38 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z"/></svg>
         </div>
         <h3>365 Tage Online-Support</h3>
         <p>Erreiche uns über den Chat zu jeder Tageszeit. Wir beantworten alle deine Fragen.</p>
       </div>
-      <div class="item">
+      <div class="item reveal">
         <div class="ic">
           <svg class="ic-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
         </div>
@@ -445,29 +582,39 @@
   <section id="kategorien" data-cms-zone="categories">
     <div class="wrap">
       <div class="sec-head">
-        <div>
+        <div class="reveal">
           <span class="eyebrow">Beliebte Kategorien</span>
-          <h2>Entdecke unser <em>Sortiment</em></h2>
+          <h2>Entdecke unser <span class="accent">Sortiment</span></h2>
         </div>
         <a class="link" href="https://jaynetix.ch/?page_id=105">Alle ansehen →</a>
       </div>
       <div class="cats">
-        <a class="cat" href="https://jaynetix.ch/?product_cat=cbd-bluten-genetics-00-schweiz-jaynetix">
+        <a class="cat reveal" href="https://jaynetix.ch/?product_cat=cbd-bluten-genetics-00-schweiz-jaynetix">
           <div class="catimg" style="background-image:url('https://jaynetix.ch/wp-content/uploads/2024/02/00-e1707630196214-600x600.png')"></div>
           <span>Indoor CBD Blüten<small>Feinste Indoor-Genetics, 6 g</small></span>
         </a>
-        <a class="cat" href="https://jaynetix.ch/?product_cat=cbd-hasch-schweiz">
+        <a class="cat reveal" href="https://jaynetix.ch/?product_cat=cbd-hasch-schweiz">
           <div class="catimg" style="background-image:url('https://jaynetix.ch/wp-content/uploads/2025/12/Gemini_Generated_Image_yte8dxyte8dxyte8-2-600x573.jpg')"></div>
           <span>CBD Hash<small>Schweizer Pollen & Hasch</small></span>
         </a>
-        <a class="cat" href="https://jaynetix.ch/?product_cat=cbd-prerolled-joints-schweiz">
+        <a class="cat reveal" href="https://jaynetix.ch/?product_cat=cbd-prerolled-joints-schweiz">
           <div class="catimg" style="background-image:url('https://jaynetix.ch/wp-content/uploads/2025/10/prerolled-cb-joints-black-background-small-600x600.jpg')"></div>
           <span>CBD Joints<small>Prerolled, tabakfrei</small></span>
         </a>
-        <a class="cat" href="https://jaynetix.ch/?product_cat=hanf-kosmetik-schweiz">
+        <a class="cat reveal" href="https://jaynetix.ch/?product_cat=hanf-kosmetik-schweiz">
           <div class="catimg" style="background-image:url('https://jaynetix.ch/wp-content/uploads/2025/10/square-oil-droplets-jaynetix-hanfmassage-huge-wave-oel-purple-schwarzhintergrund-1-Kopie-600x600.jpg')"></div>
           <span>Hanf-Kosmetik<small>Öle & Pflege</small></span>
         </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stop-scroll brand statement (pinned) -->
+  <section class="statement" data-cms-zone="statement">
+    <div class="statement-sticky">
+      <div class="wrap">
+        <span class="eyebrow center reveal">Jaynetix</span>
+        <p class="statement-claim reveal">Premium CBD<span class="accent">Made in Basel</span></p>
       </div>
     </div>
   </section>
@@ -476,9 +623,9 @@
   <section id="produkte" style="padding-top:0" data-cms-zone="products">
     <div class="wrap">
       <div class="sec-head">
-        <div>
+        <div class="reveal">
           <span class="eyebrow">Frisch im Shop</span>
-          <h2>Die neuesten <em>Produkte</em></h2>
+          <h2>Die neuesten <span class="accent">Produkte</span></h2>
         </div>
         <span class="live-badge" id="liveBadge"><span class="dot"></span> Live aus dem Shop</span>
       </div>
@@ -490,12 +637,12 @@
   <section id="faq" style="padding-top:0" data-cms-zone="faq">
     <div class="wrap">
       <div class="sec-head" style="justify-content:center;text-align:center;">
-        <div>
+        <div class="reveal">
           <span class="eyebrow center">Häufig gestellte Fragen</span>
-          <h2>Alles über <em>CBD</em></h2>
+          <h2>Alles über <span class="accent">CBD</span></h2>
         </div>
       </div>
-      <div class="faq-wrap">
+      <div class="faq-wrap reveal">
         <details class="faq" open>
           <summary>Was ist CBD und wie unterscheidet es sich von THC?</summary>
           <div class="ans">CBD (Cannabidiol) ist ein nicht-psychoaktives Cannabinoid aus der Hanfpflanze. Im Gegensatz zu THC wirkt CBD nicht berauschend und ist in der Schweiz legal, solange der THC-Gehalt unter 1% liegt. CBD wird für seine potenziell entspannenden und wohltuenden Eigenschaften geschätzt.</div>
@@ -525,16 +672,21 @@
   </section>
 
   <!-- Newsletter -->
-  <section style="padding-top:0">
-    <div class="wrap">
-      <div class="news" data-cms-zone="newsletter">
-        <span class="eyebrow center">Newsletter</span>
-        <h2>Bleib informiert</h2>
-        <p>Erhalte die neuesten Jaynetix News und Rabattaktionen direkt in dein Postfach.</p>
-        <form id="newsForm" action="https://jaynetix.ch/" method="get">
-          <input type="email" name="email" placeholder="Deine E-Mail-Adresse" required aria-label="E-Mail-Adresse">
-          <button class="btn btn-primary" type="submit">Abonnieren</button>
-        </form>
+  <section class="news-section" style="padding:0">
+    <div class="news-band" data-cms-zone="newsletter">
+      <div class="wrap">
+        <div class="news-grid">
+          <div class="news-copy reveal">
+            <span class="eyebrow">Newsletter</span>
+            <h2>Abonniere unseren Newsletter</h2>
+            <p>Bleib informiert und erhalte die neuesten Jaynetix News und Rabattaktionen in dein Mailpostfach.</p>
+          </div>
+          <form id="newsForm" class="news-form reveal" action="https://jaynetix.ch/" method="get">
+            <input type="email" name="email" placeholder="deine@email.ch" required aria-label="E-Mail-Adresse">
+            <button class="btn btn-primary" type="submit">Abonnieren</button>
+          </form>
+        </div>
+        <div class="news-divider"></div>
       </div>
     </div>
   </section>
@@ -544,7 +696,7 @@
     <div class="wrap">
       <div class="cols">
         <div>
-          <img class="logo" src="https://jaynetix.ch/wp-content/uploads/2024/02/jaynetix-new-logo-with-text-final-e1707637440318.png" alt="Jaynetix">
+          <img class="logo" src="https://jaynetix.ch/wp-content/uploads/2024/02/jaynetix-new-logo-with-text-final-e1707637440318.png" alt="Jaynetix" loading="lazy" decoding="async">
           <p class="about">Jaynetix ist eine Marke unter der Firma <b>that Sky Walker Enterprise</b>. Premium CBD-Rohstoffe und Hanfprodukte, hergestellt in Basel.</p>
           <p class="legal-note">Nur für Erwachsene (18+). CBD-Produkte mit THC &lt; 1% gemäss Schweizer Recht. Kein Heilversprechen — nicht zur Diagnose, Behandlung oder Vorbeugung von Krankheiten bestimmt.</p>
         </div>
@@ -709,6 +861,74 @@
         navToggle.setAttribute("aria-expanded", "false");
       }));
     }
+  </script>
+
+  <!-- ── Design-pass v2: scroll-reveal, hero parallax, smoke motion ── -->
+  <script>
+    (function () {
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      // Reduced motion → freeze the procedural smoke to a static wisp, skip the rest
+      if (reduce) {
+        document.querySelectorAll(".hero-smoke svg").forEach(function (svg) {
+          try { svg.pauseAnimations(); } catch (e) {}
+        });
+        return;
+      }
+
+      // ── Scroll-reveal ────────────────────────────────────────────
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+
+        document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+
+        // Product cards are (re)rendered by the store script → reveal new ones too
+        var grid = document.getElementById("productGrid");
+        if (grid) {
+          var tagProducts = function () {
+            grid.querySelectorAll(".product:not(.reveal)").forEach(function (p) {
+              p.classList.add("reveal"); io.observe(p);
+            });
+          };
+          tagProducts();
+          new MutationObserver(tagProducts).observe(grid, { childList: true });
+        }
+      } else {
+        document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("is-visible"); });
+      }
+
+      // ── Hero parallax: image drifts on scroll ────────────────────
+      var heroImg = document.querySelector(".hero-media img");
+      var ticking = false;
+      if (heroImg) {
+        window.addEventListener("scroll", function () {
+          if (ticking) return; ticking = true;
+          requestAnimationFrame(function () {
+            var y = window.pageYOffset || 0;
+            if (y < window.innerHeight * 1.3) {
+              heroImg.style.transform = "scale(1.12) translateY(" + (y * 0.05) + "px)";
+            }
+            ticking = false;
+          });
+        }, { passive: true });
+      }
+
+      // ── Subtle pointer parallax on the smoke (desktop only) ──────
+      var smoke = document.querySelector(".hero-smoke");
+      var hero = document.querySelector(".hero");
+      if (smoke && hero && window.matchMedia("(pointer:fine)").matches) {
+        hero.addEventListener("pointermove", function (ev) {
+          var r = hero.getBoundingClientRect();
+          var dx = (ev.clientX - r.left) / r.width - 0.5;
+          var dy = (ev.clientY - r.top) / r.height - 0.5;
+          smoke.style.transform = "translate3d(" + (dx * 16).toFixed(1) + "px," + (dy * 12).toFixed(1) + "px,0)";
+        });
+      }
+    })();
   </script>
 </body>
 </html>
