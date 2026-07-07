@@ -13,24 +13,29 @@
   <meta property="og:image" content="https://jaynetix.ch/wp-content/uploads/2024/02/jaynetix-new-logo-with-text-final-e1707637440318.png">
   <meta property="og:locale" content="de_CH">
   <link rel="preconnect" href="https://jaynetix.ch" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       color-scheme: dark;
-      --bg: #0b0e0c;
-      --bg-2: #0f1310;
-      --surface: #14190f;
-      --surface-2: #171d14;
-      --border: #26301f;
-      --border-soft: #1e261a;
-      --text: #eef2ea;
-      --muted: #9aa596;
-      --faint: #6c7767;
-      --accent: #6bc46a;
-      --accent-strong: #4ea94f;
-      --gold: #d9bd7e;
-      --radius: 16px;
-      --maxw: 1160px;
-      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans", sans-serif;
+      --bg: #0a0806;        /* rich near-black, warm undertone */
+      --bg-2: #120e0a;
+      --surface: #17120c;
+      --surface-2: #1c160f;
+      --border: #2c2318;
+      --border-soft: #221b13;
+      --text: #f4ede1;      /* warm ivory */
+      --muted: #b4a993;
+      --faint: #7d7364;
+      --gold: #c9a34e;      /* primary accent */
+      --gold-light: #e8cd8a;
+      --oxblood: #7c2333;   /* secondary accent */
+      --oxblood-light: #a13347;
+      --radius: 6px;
+      --maxw: 1200px;
+      --font: "Archivo", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      --display: "Fraunces", Georgia, "Times New Roman", serif;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -41,202 +46,302 @@
       color: var(--text);
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    /* Tasteful film-grain / vignette over the whole page */
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: 100; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.035; mix-blend-mode: overlay;
     }
     a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
-    .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+    .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
     .eyebrow {
-      font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase;
-      color: var(--accent); font-weight: 600;
+      display: inline-flex; align-items: center; gap: .7rem;
+      font-family: var(--display); font-style: italic; font-optical-sizing: auto;
+      font-size: 0.9rem; letter-spacing: 0.06em; color: var(--gold); font-weight: 500;
     }
+    .eyebrow::before {
+      content: ""; width: 26px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold));
+      display: inline-block;
+    }
+    .eyebrow.center::before { display: none; }
+
     .btn {
-      display: inline-flex; align-items: center; gap: 0.5rem;
-      font-weight: 600; font-size: 0.95rem; line-height: 1;
-      padding: 0.85rem 1.4rem; border-radius: 999px; cursor: pointer;
-      border: 1px solid transparent; transition: transform .15s ease, background .2s ease, border-color .2s ease;
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      font-family: var(--font); font-weight: 600; font-size: 0.92rem; line-height: 1;
+      letter-spacing: 0.02em; padding: 0.95rem 1.6rem; border-radius: 999px; cursor: pointer;
+      border: 1px solid transparent; transition: transform .18s ease, background .25s ease, border-color .25s ease, color .25s ease, box-shadow .25s ease;
     }
     .btn:active { transform: translateY(1px); }
-    .btn-primary { background: var(--accent); color: #06210a; }
-    .btn-primary:hover { background: #7fd67e; }
+    .btn svg { width: 17px; height: 17px; }
+    .btn-primary { background: var(--gold); color: #1a1206; box-shadow: 0 10px 30px -12px rgba(201,163,78,.55); }
+    .btn-primary:hover { background: var(--gold-light); box-shadow: 0 14px 34px -12px rgba(232,205,138,.6); }
     .btn-ghost { border-color: var(--border); color: var(--text); background: transparent; }
-    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-ghost:hover { border-color: var(--oxblood-light); color: var(--gold-light); background: rgba(124,35,51,.12); }
+
+    /* Icons */
+    .ic-svg { width: 1em; height: 1em; stroke: currentColor; fill: none;
+      stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+    .ch-mono {
+      display: inline-flex; align-items: center; justify-content: center;
+      font-family: var(--display); font-weight: 600; font-size: 0.62em; letter-spacing: .04em;
+      width: 1.5em; height: 1.5em; border: 1px solid currentColor; border-radius: 3px; line-height: 1;
+    }
 
     /* Announcement bar */
     .announce {
-      background: linear-gradient(90deg, #10160e, #0c110a);
+      background: linear-gradient(90deg, #140f09, #0d0a07 55%, #140f09);
       border-bottom: 1px solid var(--border-soft);
-      font-size: 0.78rem; color: var(--muted); letter-spacing: 0.02em;
+      font-size: 0.76rem; color: var(--muted); letter-spacing: 0.04em;
     }
-    .announce .wrap { display: flex; gap: 1.4rem; justify-content: center; flex-wrap: wrap; padding-top: .55rem; padding-bottom: .55rem; }
+    .announce .wrap { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; padding-top: .6rem; padding-bottom: .6rem; }
+    .announce span { display: inline-flex; align-items: center; gap: .5rem; }
+    .announce .ic-svg, .announce .ch-mono { color: var(--gold); font-size: 1rem; }
     .announce b { color: var(--text); font-weight: 600; }
 
     /* Header */
     header.site {
       position: sticky; top: 0; z-index: 40;
-      background: rgba(11,14,12,0.82); backdrop-filter: blur(12px);
+      background: rgba(10,8,6,0.72); backdrop-filter: blur(14px) saturate(1.1);
       border-bottom: 1px solid var(--border-soft);
     }
-    header.site .wrap { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+    header.site .wrap { display: flex; align-items: center; justify-content: space-between; height: 76px; }
     .brand { display: flex; align-items: center; gap: .6rem; }
     .brand img { height: 34px; width: auto; }
-    nav.main { display: flex; gap: 1.6rem; align-items: center; }
-    nav.main a { font-size: 0.92rem; color: var(--muted); font-weight: 500; transition: color .18s; }
+    nav.main { display: flex; gap: 2rem; align-items: center; }
+    nav.main a { position: relative; font-size: 0.9rem; color: var(--muted); font-weight: 500; letter-spacing: .01em; transition: color .2s; }
+    nav.main a::after {
+      content: ""; position: absolute; left: 0; bottom: -6px; width: 0; height: 1px;
+      background: var(--gold); transition: width .25s ease;
+    }
     nav.main a:hover { color: var(--text); }
+    nav.main a:hover::after { width: 100%; }
     .header-cta { display: flex; align-items: center; gap: 1rem; }
     .cart-link {
-      display: inline-flex; align-items: center; gap: .45rem; font-size: 0.9rem; color: var(--text);
-      border: 1px solid var(--border); border-radius: 999px; padding: .5rem .9rem; font-weight: 600;
+      display: inline-flex; align-items: center; gap: .5rem; font-size: 0.88rem; color: var(--text);
+      border: 1px solid var(--border); border-radius: 999px; padding: .55rem 1rem; font-weight: 600;
+      transition: border-color .25s, color .25s;
     }
-    .cart-link:hover { border-color: var(--accent); }
+    .cart-link .ic-svg { font-size: 1.05rem; color: var(--gold); }
+    .cart-link:hover { border-color: var(--gold); }
+    .nav-toggle {
+      display: none; align-items: center; justify-content: center; flex: none;
+      width: 40px; height: 40px; border: 1px solid var(--border); border-radius: 50%;
+      background: transparent; color: var(--text); cursor: pointer; transition: border-color .25s, color .25s;
+    }
+    .nav-toggle .ic-svg { width: 18px; height: 18px; }
+    .nav-toggle:hover { border-color: var(--gold); color: var(--gold); }
 
-    /* Hero */
-    .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--border-soft); }
-    .hero::before {
-      content: ""; position: absolute; inset: 0;
+    /* ── Hero ────────────────────────────────────────────────── */
+    .hero {
+      position: relative; min-height: min(90vh, 860px); display: flex; align-items: center;
+      overflow: hidden; border-bottom: 1px solid var(--border-soft); background: var(--bg);
+    }
+    .hero-media { position: absolute; inset: 0 0 0 28%; z-index: 0; }
+    .hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 46%; }
+    .hero-scrim {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
       background:
-        radial-gradient(60% 70% at 78% 30%, rgba(107,196,106,0.16), transparent 60%),
-        radial-gradient(50% 60% at 12% 80%, rgba(107,196,106,0.08), transparent 60%);
-      pointer-events: none;
+        linear-gradient(90deg, var(--bg) 0%, var(--bg) 32%, rgba(10,8,6,0.82) 48%, rgba(10,8,6,0.25) 70%, transparent 88%),
+        radial-gradient(120% 130% at 12% 50%, transparent 55%, rgba(10,8,6,0.55) 100%),
+        linear-gradient(0deg, rgba(10,8,6,0.55), transparent 30%);
     }
-    .hero .wrap { position: relative; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2.5rem; align-items: center; padding: 4.5rem 20px 4rem; }
-    .hero h1 { font-size: clamp(2.1rem, 4.4vw, 3.3rem); line-height: 1.08; letter-spacing: -0.02em; margin: 1rem 0 1.1rem; font-weight: 700; }
-    .hero h1 .accent { color: var(--accent); }
-    .hero p.lead { font-size: 1.08rem; color: var(--muted); max-width: 46ch; margin: 0 0 1.8rem; }
+    .hero-inner { position: relative; z-index: 2; }
+    .hero-copy { max-width: 30rem; padding: 5rem 0; }
+    .hero-copy h1 {
+      font-family: var(--display); font-optical-sizing: auto;
+      font-size: clamp(2.6rem, 6vw, 4.6rem); line-height: 0.98; letter-spacing: -0.015em;
+      margin: 1.4rem 0 1.4rem; font-weight: 300; color: var(--text);
+    }
+    .hero-copy h1 em { font-style: italic; font-weight: 500; color: var(--gold); }
+    .hero-copy p.lead { font-size: 1.06rem; color: var(--muted); max-width: 44ch; margin: 0 0 2.2rem; }
     .hero-actions { display: flex; gap: .8rem; flex-wrap: wrap; }
-    .hero-visual { position: relative; display: flex; justify-content: center; }
-    .hero-visual .glow {
-      position: absolute; width: 78%; aspect-ratio: 1; border-radius: 50%;
-      background: radial-gradient(circle, rgba(107,196,106,0.35), transparent 65%); filter: blur(26px); z-index: 0;
-    }
-    .hero-visual img {
-      position: relative; z-index: 1; width: 82%; max-width: 380px; border-radius: 24px;
-      box-shadow: 0 30px 70px -30px rgba(0,0,0,0.8);
+    .hero-scroll {
+      position: absolute; left: 24px; bottom: 1.6rem; z-index: 2;
+      font-family: var(--display); font-style: italic; font-size: .82rem; color: var(--faint);
+      display: inline-flex; align-items: center; gap: .5rem; letter-spacing: .04em;
     }
 
     /* Trust strip */
-    .trust { border-bottom: 1px solid var(--border-soft); background: var(--bg-2); }
-    .trust .wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; padding: 2.2rem 20px; }
-    .trust .item { text-align: center; }
-    .trust .item h3 { font-size: 1rem; margin: 0 0 .3rem; font-weight: 650; }
+    .trust { border-bottom: 1px solid var(--border-soft); background: var(--bg-2); position: relative; }
+    .trust .wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; padding: 0; }
+    .trust .item { text-align: left; padding: 2.6rem 2rem; position: relative; }
+    .trust .item + .item { border-left: 1px solid var(--border-soft); }
+    .trust .ic {
+      display: inline-flex; width: 44px; height: 44px; align-items: center; justify-content: center;
+      border: 1px solid var(--border); border-radius: 50%; color: var(--gold); font-size: 1.25rem; margin-bottom: 1.1rem;
+    }
+    .trust .item h3 { font-family: var(--display); font-size: 1.15rem; margin: 0 0 .4rem; font-weight: 500; letter-spacing: -.01em; }
     .trust .item p { font-size: 0.88rem; color: var(--muted); margin: 0; }
-    .trust .ic { font-size: 1.3rem; margin-bottom: .5rem; }
 
     /* Section */
-    section { padding: 4.5rem 0; }
-    .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 2.2rem; flex-wrap: wrap; }
-    .sec-head h2 { font-size: clamp(1.5rem, 3vw, 2.1rem); letter-spacing: -0.02em; margin: .5rem 0 0; font-weight: 700; }
-    .sec-head .link { color: var(--accent); font-weight: 600; font-size: 0.92rem; }
-    .sec-head .link:hover { text-decoration: underline; }
+    section { padding: 5.5rem 0; }
+    .sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; margin-bottom: 2.6rem; flex-wrap: wrap; }
+    .sec-head h2 { font-family: var(--display); font-optical-sizing: auto; font-size: clamp(1.9rem, 3.6vw, 2.9rem); letter-spacing: -0.02em; line-height: 1.04; margin: .6rem 0 0; font-weight: 300; }
+    .sec-head h2 em { font-style: italic; color: var(--gold); font-weight: 500; }
+    .sec-head .link {
+      color: var(--gold); font-weight: 600; font-size: 0.86rem; letter-spacing: .04em;
+      display: inline-flex; align-items: center; gap: .4rem; transition: gap .2s, color .2s;
+    }
+    .sec-head .link:hover { gap: .7rem; color: var(--gold-light); }
 
-    /* Categories */
-    .cats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+    /* Categories — asymmetric editorial grid */
+    .cats { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 220px; gap: 1rem; }
     .cat {
       position: relative; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
-      background: var(--surface); min-height: 180px; display: flex; align-items: flex-end;
-      transition: border-color .2s ease, transform .2s ease;
+      background: var(--surface); display: flex; align-items: flex-end;
+      transition: border-color .3s ease, transform .3s ease, box-shadow .3s ease;
     }
-    .cat:hover { border-color: var(--accent); transform: translateY(-3px); }
-    .cat .catimg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.55; transition: opacity .25s, transform .5s; }
-    .cat:hover .catimg { opacity: 0.72; transform: scale(1.05); }
-    .cat::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,11,7,0.92), rgba(8,11,7,0.15)); }
-    .cat span { position: relative; z-index: 2; padding: 1.1rem; font-weight: 650; font-size: 1.02rem; }
-    .cat span small { display: block; color: var(--muted); font-weight: 500; font-size: 0.78rem; margin-top: .2rem; }
+    .cat:first-child { grid-row: span 2; }
+    .cat:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 24px 50px -30px rgba(0,0,0,.9); }
+    .cat .catimg { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0.5; filter: saturate(.85); transition: opacity .35s, transform .6s; }
+    .cat:hover .catimg { opacity: 0.72; transform: scale(1.06); }
+    .cat::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,6,4,0.94) 8%, rgba(8,6,4,0.35) 55%, rgba(8,6,4,0.05)); }
+    .cat span { position: relative; z-index: 2; padding: 1.3rem; font-family: var(--display); font-weight: 500; font-size: 1.2rem; letter-spacing: -.01em; }
+    .cat span small { display: block; font-family: var(--font); color: var(--muted); font-weight: 400; font-size: 0.78rem; letter-spacing: .02em; margin-top: .35rem; }
 
     /* Products */
-    .grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 1.2rem;
-    }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(238px, 1fr)); gap: 1.3rem; }
     .product {
       display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--border-soft);
-      border-radius: var(--radius); overflow: hidden; transition: border-color .2s ease, transform .2s ease;
+      border-radius: var(--radius); overflow: hidden; transition: border-color .3s ease, transform .3s ease, box-shadow .3s ease;
     }
-    .product:hover { border-color: var(--accent); transform: translateY(-3px); }
-    .product .thumb { aspect-ratio: 1; background: #0d120b; overflow: hidden; }
-    .product .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
-    .product:hover .thumb img { transform: scale(1.06); }
-    .product .body { padding: 1rem 1.05rem 1.15rem; display: flex; flex-direction: column; gap: .55rem; flex: 1; }
-    .product .cat-tag { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
-    .product .pname { font-size: 0.98rem; font-weight: 600; line-height: 1.3; margin: 0; }
+    .product:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 24px 50px -30px rgba(0,0,0,.9); }
+    .product .thumb { aspect-ratio: 1; background: #0d0a06; overflow: hidden; display: block; }
+    .product .thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
+    .product:hover .thumb img { transform: scale(1.07); }
+    .product .body { padding: 1.15rem 1.15rem 1.25rem; display: flex; flex-direction: column; gap: .55rem; flex: 1; }
+    .product .cat-tag {
+      align-self: flex-start; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--gold-light); font-weight: 600; padding: .28rem .6rem; border-radius: 999px;
+      background: rgba(124,35,51,.16); border: 1px solid rgba(161,51,71,.4);
+    }
+    .product .pname { font-family: var(--display); font-size: 1.08rem; font-weight: 500; line-height: 1.2; letter-spacing: -.01em; margin: .15rem 0 0; transition: color .2s; }
+    .product a:hover .pname { color: var(--gold); }
     .product .pdesc { font-size: 0.82rem; color: var(--faint); margin: 0; flex: 1; }
-    .product .foot { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: .4rem; }
-    .product .price { font-size: 1.05rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+    .product .foot { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-top: .5rem; padding-top: .9rem; border-top: 1px solid var(--border-soft); }
+    .product .price { font-family: var(--display); font-size: 1.2rem; font-weight: 500; color: var(--gold); white-space: nowrap; }
     .product .add {
-      font-size: 0.82rem; font-weight: 600; padding: .55rem .9rem; border-radius: 999px;
-      background: rgba(107,196,106,0.12); color: var(--accent); border: 1px solid rgba(107,196,106,0.3);
-      transition: background .18s, color .18s;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: .01em; padding: .55rem .95rem; border-radius: 999px;
+      background: transparent; color: var(--gold); border: 1px solid var(--border); transition: background .22s, color .22s, border-color .22s;
     }
-    .product .add:hover { background: var(--accent); color: #06210a; }
+    .product .add:hover { background: var(--gold); color: #1a1206; border-color: var(--gold); }
+
     .live-badge {
-      display: inline-flex; align-items: center; gap: .4rem; font-size: 0.72rem; color: var(--muted);
-      border: 1px solid var(--border); border-radius: 999px; padding: .3rem .7rem;
+      display: inline-flex; align-items: center; gap: .5rem; font-size: 0.72rem; color: var(--muted);
+      letter-spacing: .04em; border: 1px solid var(--border); border-radius: 999px; padding: .38rem .8rem;
     }
-    .live-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); }
-    .live-badge.on .dot { background: var(--accent); box-shadow: 0 0 0 3px rgba(107,196,106,0.2); }
+    .live-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); transition: background .3s, box-shadow .3s; }
+    .live-badge.on .dot { background: var(--oxblood-light); box-shadow: 0 0 0 3px rgba(161,51,71,0.22); }
 
     /* FAQ */
-    .faq-wrap { max-width: 820px; margin: 0 auto; }
+    .faq-wrap { max-width: 840px; margin: 0 auto; }
     details.faq {
-      border: 1px solid var(--border-soft); border-radius: 12px; background: var(--surface);
-      margin-bottom: .7rem; overflow: hidden;
+      border-bottom: 1px solid var(--border-soft); background: transparent; overflow: hidden;
     }
-    details.faq[open] { border-color: var(--border); }
     details.faq summary {
-      cursor: pointer; list-style: none; padding: 1.05rem 1.2rem; font-weight: 600; font-size: 0.98rem;
-      display: flex; justify-content: space-between; gap: 1rem; align-items: center;
+      cursor: pointer; list-style: none; padding: 1.35rem .4rem; font-family: var(--display); font-weight: 500;
+      font-size: 1.12rem; letter-spacing: -.01em; display: flex; justify-content: space-between; gap: 1rem; align-items: center;
+      transition: color .2s;
     }
+    details.faq summary:hover { color: var(--gold); }
     details.faq summary::-webkit-details-marker { display: none; }
-    details.faq summary::after { content: "+"; color: var(--accent); font-size: 1.3rem; font-weight: 400; transition: transform .2s; }
+    details.faq summary::after { content: "+"; color: var(--gold); font-size: 1.5rem; font-weight: 300; line-height: 1; transition: transform .25s; }
     details.faq[open] summary::after { transform: rotate(45deg); }
-    details.faq .ans { padding: 0 1.2rem 1.2rem; color: var(--muted); font-size: 0.92rem; }
+    details.faq .ans { padding: 0 .4rem 1.5rem; color: var(--muted); font-size: 0.95rem; max-width: 68ch; }
 
     /* Newsletter */
-    .news { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 3rem 2rem; text-align: center; }
-    .news h2 { margin: .4rem 0 .6rem; font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
-    .news p { color: var(--muted); margin: 0 auto 1.6rem; max-width: 42ch; }
-    .news form { display: flex; gap: .6rem; max-width: 440px; margin: 0 auto; flex-wrap: wrap; }
+    .news {
+      position: relative; background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      padding: 4rem 2rem; text-align: center; overflow: hidden;
+    }
+    .news::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(80% 120% at 50% 0%, rgba(201,163,78,.1), transparent 60%);
+    }
+    .news > * { position: relative; }
+    .news .eyebrow { justify-content: center; }
+    .news h2 { font-family: var(--display); font-weight: 300; margin: .7rem 0 .7rem; font-size: clamp(1.8rem, 3vw, 2.5rem); letter-spacing: -.02em; }
+    .news p { color: var(--muted); margin: 0 auto 1.9rem; max-width: 44ch; }
+    .news form { display: flex; gap: .6rem; max-width: 460px; margin: 0 auto; flex-wrap: wrap; }
     .news input {
       flex: 1; min-width: 200px; background: var(--bg); border: 1px solid var(--border); color: var(--text);
-      border-radius: 999px; padding: .85rem 1.2rem; font-size: 0.95rem; font-family: inherit;
+      border-radius: 999px; padding: .95rem 1.3rem; font-size: 0.95rem; font-family: inherit;
     }
-    .news input:focus { outline: none; border-color: var(--accent); }
+    .news input::placeholder { color: var(--faint); }
+    .news input:focus { outline: none; border-color: var(--gold); }
 
     /* Footer */
-    footer.site { border-top: 1px solid var(--border-soft); background: var(--bg-2); padding: 3.5rem 0 2rem; margin-top: 1rem; }
-    footer.site .cols { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 2rem; }
-    footer.site img.logo { height: 40px; margin-bottom: 1rem; }
+    footer.site { border-top: 1px solid var(--border-soft); background: var(--bg-2); padding: 4rem 0 2rem; margin-top: 1rem; }
+    footer.site .cols { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 2.5rem; }
+    footer.site img.logo { height: 40px; margin-bottom: 1.3rem; }
     footer.site p.about { color: var(--muted); font-size: 0.9rem; max-width: 34ch; }
-    footer.site h4 { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); margin: 0 0 1rem; }
+    footer.site p.about b { color: var(--text); }
+    footer.site h4 { font-family: var(--display); font-style: italic; font-size: 0.9rem; letter-spacing: 0.02em; text-transform: none; color: var(--gold); margin: 0 0 1.1rem; font-weight: 500; }
     footer.site ul { list-style: none; padding: 0; margin: 0; }
-    footer.site ul li { margin-bottom: .55rem; }
-    footer.site ul a { color: var(--muted); font-size: 0.9rem; }
-    footer.site ul a:hover { color: var(--text); }
-    .addr { color: var(--muted); font-size: 0.9rem; font-style: normal; line-height: 1.7; }
+    footer.site ul li { margin-bottom: .6rem; }
+    footer.site ul a { color: var(--muted); font-size: 0.9rem; transition: color .2s; }
+    footer.site ul a:hover { color: var(--gold); }
+    .addr { color: var(--muted); font-size: 0.9rem; font-style: normal; line-height: 1.8; }
+    .addr a { color: var(--gold); }
     .foot-bottom {
-      border-top: 1px solid var(--border-soft); margin-top: 2.5rem; padding-top: 1.5rem;
+      border-top: 1px solid var(--border-soft); margin-top: 3rem; padding-top: 1.6rem;
       display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
       color: var(--faint); font-size: 0.8rem;
     }
-    .socials { display: flex; gap: 1rem; }
-    .socials a { color: var(--muted); }
-    .socials a:hover { color: var(--accent); }
-    .legal-note { color: var(--faint); font-size: 0.78rem; max-width: 60ch; margin-top: .8rem; }
+    .socials { display: flex; gap: 1.4rem; }
+    .socials a { color: var(--muted); transition: color .2s; }
+    .socials a:hover { color: var(--gold); }
+    .legal-note { color: var(--faint); font-size: 0.78rem; max-width: 60ch; margin-top: 1rem; }
 
     /* Responsive */
-    @media (max-width: 900px) {
-      .hero .wrap { grid-template-columns: 1fr; padding-top: 3rem; }
-      .hero-visual { order: -1; }
-      .hero-visual img { max-width: 260px; }
-      .cats { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 1000px) {
+      .hero-media { inset: 0 0 0 20%; }
+    }
+    @media (max-width: 820px) {
+      .hero { min-height: 82vh; align-items: flex-end; }
+      .hero-media { inset: 0; }
+      .hero-media img { object-position: 50% 30%; }
+      .hero-scrim {
+        background:
+          linear-gradient(0deg, var(--bg) 4%, rgba(10,8,6,0.86) 34%, rgba(10,8,6,0.35) 62%, rgba(10,8,6,0.15) 100%),
+          radial-gradient(120% 60% at 50% 100%, rgba(10,8,6,.6), transparent 70%);
+      }
+      .hero-copy { padding: 3rem 0 4.5rem; max-width: 100%; }
+      .hero-copy p.lead { max-width: 52ch; }
+      .hero-scroll { display: none; }
+      .cats { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 190px; }
+      .cat:first-child { grid-row: span 1; }
+      .trust .wrap { grid-template-columns: 1fr; }
+      .trust .item + .item { border-left: 0; border-top: 1px solid var(--border-soft); }
       footer.site .cols { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 720px) {
-      nav.main { display: none; }
-      .trust .wrap { grid-template-columns: 1fr; gap: 1.2rem; }
+      header.site .wrap { position: relative; }
+      .nav-toggle { display: inline-flex; }
+      nav.main {
+        display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 39;
+        flex-direction: column; align-items: stretch; gap: 0;
+        background: rgba(10,8,6,0.98); backdrop-filter: blur(14px);
+        border-bottom: 1px solid var(--border-soft);
+        padding: .4rem 0;
+      }
+      nav.main.open { display: flex; }
+      nav.main a {
+        padding: 1rem 24px; font-size: 1rem; border-top: 1px solid var(--border-soft);
+      }
+      nav.main a:first-child { border-top: none; }
+      nav.main a::after { display: none; }
     }
     @media (max-width: 520px) {
+      section { padding: 4rem 0; }
       .cats { grid-template-columns: 1fr; }
       footer.site .cols { grid-template-columns: 1fr; }
       .header-cta .btn-primary { display: none; }
+      .announce .wrap { gap: 1.2rem; }
     }
   </style>
 </head>
@@ -245,9 +350,18 @@
   <!-- Announcement -->
   <div class="announce">
     <div class="wrap">
-      <span>🌿 <b>Gratis Versand</b> in der ganzen Schweiz</span>
-      <span>🧪 Laborgeprüft · <b>THC &lt; 1%</b></span>
-      <span>🇨🇭 Made in Basel · Nur für Erwachsene (18+)</span>
+      <span>
+        <svg class="ic-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13c0-6 5-9 16-10 1 11-3 16-9 17z"/><path d="M4 20c3-4 6-6 10-7"/></svg>
+        <b>Gratis Versand</b> in der ganzen Schweiz
+      </span>
+      <span>
+        <svg class="ic-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6.3L5.1 17.2A2 2 0 0 0 6.8 20h10.4a2 2 0 0 0 1.7-2.8L14 9.3V3"/><path d="M7.4 14h9.2"/></svg>
+        Laborgeprüft · <b>THC &lt; 1%</b>
+      </span>
+      <span>
+        <span class="ch-mono" aria-hidden="true">CH</span>
+        Made in Basel · Nur für Erwachsene (18+)
+      </span>
     </div>
   </div>
 
@@ -257,7 +371,7 @@
       <a class="brand" href="https://www.jaynetix.ch/" aria-label="Jaynetix Startseite">
         <img src="https://jaynetix.ch/wp-content/uploads/2024/02/jaynetix-new-logo-with-text-final-e1707637440318.png" alt="Jaynetix">
       </a>
-      <nav class="main">
+      <nav class="main" id="mainNav">
         <a href="https://jaynetix.ch/?page_id=105">Shop</a>
         <a href="#kategorien">Kategorien</a>
         <a href="#produkte">Produkte</a>
@@ -265,46 +379,62 @@
         <a href="https://jaynetix.ch/?page_id=84">Kontakt</a>
       </nav>
       <div class="header-cta">
-        <a class="cart-link" href="https://jaynetix.ch/?page_id=77" aria-label="Warenkorb">🛒 Warenkorb</a>
+        <a class="cart-link" href="https://jaynetix.ch/?page_id=77" aria-label="Warenkorb">
+          <svg class="ic-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3l2.4 12.4a1.5 1.5 0 0 0 1.5 1.2h8.2a1.5 1.5 0 0 0 1.5-1.2L22 7H6"/></svg>
+          Warenkorb
+        </a>
         <a class="btn btn-primary" href="https://jaynetix.ch/?page_id=105">Zum Shop</a>
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mainNav">
+          <svg class="ic-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>
+        </button>
       </div>
     </div>
   </header>
 
   <!-- Hero -->
   <div class="hero" data-cms-zone="hero">
-    <div class="wrap">
+    <div class="hero-media">
+      <img src="images/hero-cannabis-gold.jpg" alt="Premium CBD Cannabis Blüte mit goldenem Licht" loading="eager">
+    </div>
+    <div class="hero-scrim"></div>
+    <div class="hero-inner wrap">
       <div class="hero-copy">
         <span class="eyebrow">Schweizer CBD · Made in Basel</span>
-        <h1>Erlebe den ultimativen <span class="accent">CBD Genuss</span> mit unseren neuesten Cannabis Strains.</h1>
+        <h1>Erlebe den ultimativen <em>CBD Genuss</em> mit unseren neuesten Cannabis Strains.</h1>
         <p class="lead">Premium Indoor CBD Blüten, Hash, prerolled Joints und Hanf-Kosmetik — sorgfältig gezogen, laborgeprüft und mit Liebe in der Schweiz hergestellt.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="#produkte">Produkte entdecken</a>
           <a class="btn btn-ghost" href="#kategorien">Kategorien ansehen</a>
         </div>
       </div>
-      <div class="hero-visual">
-        <div class="glow"></div>
-        <img src="https://jaynetix.ch/wp-content/uploads/2024/02/03-e1708791737302-600x600.png" alt="Jaynetix Indoor CBD Blüten" loading="eager">
-      </div>
     </div>
+    <span class="hero-scroll" aria-hidden="true">
+      <svg class="ic-svg" style="width:14px;height:14px" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m6 13 6 6 6-6"/></svg>
+      Scroll
+    </span>
   </div>
 
   <!-- Trust -->
   <div class="trust">
     <div class="wrap">
       <div class="item">
-        <div class="ic">🚚</div>
+        <div class="ic">
+          <svg class="ic-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 17V6a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h1"/><path d="M14 9h4l3 3v5a1 1 0 0 1-1 1h-1"/><path d="M9 18h5"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg>
+        </div>
         <h3>Gratis Versand</h3>
         <p>Profitiere von unserem Gratis Versand. Deine Ware ist in 3–4 Tagen bei dir.</p>
       </div>
       <div class="item">
-        <div class="ic">💬</div>
+        <div class="ic">
+          <svg class="ic-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7A8.5 8.5 0 0 1 4 11.5 8.38 8.38 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z"/></svg>
+        </div>
         <h3>365 Tage Online-Support</h3>
         <p>Erreiche uns über den Chat zu jeder Tageszeit. Wir beantworten alle deine Fragen.</p>
       </div>
       <div class="item">
-        <div class="ic">🇨🇭</div>
+        <div class="ic">
+          <svg class="ic-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+        </div>
         <h3>Schweizer Qualität</h3>
         <p>Erwarte nur die beste Qualität. Wir stehen hinter unseren Produkten — nur das Beste für dich.</p>
       </div>
@@ -317,7 +447,7 @@
       <div class="sec-head">
         <div>
           <span class="eyebrow">Beliebte Kategorien</span>
-          <h2>Entdecke unser Sortiment</h2>
+          <h2>Entdecke unser <em>Sortiment</em></h2>
         </div>
         <a class="link" href="https://jaynetix.ch/?page_id=105">Alle ansehen →</a>
       </div>
@@ -348,7 +478,7 @@
       <div class="sec-head">
         <div>
           <span class="eyebrow">Frisch im Shop</span>
-          <h2>Die neuesten Produkte</h2>
+          <h2>Die neuesten <em>Produkte</em></h2>
         </div>
         <span class="live-badge" id="liveBadge"><span class="dot"></span> Live aus dem Shop</span>
       </div>
@@ -361,8 +491,8 @@
     <div class="wrap">
       <div class="sec-head" style="justify-content:center;text-align:center;">
         <div>
-          <span class="eyebrow">Häufig gestellte Fragen</span>
-          <h2>Alles über CBD</h2>
+          <span class="eyebrow center">Häufig gestellte Fragen</span>
+          <h2>Alles über <em>CBD</em></h2>
         </div>
       </div>
       <div class="faq-wrap">
@@ -398,7 +528,7 @@
   <section style="padding-top:0">
     <div class="wrap">
       <div class="news" data-cms-zone="newsletter">
-        <span class="eyebrow">Newsletter</span>
+        <span class="eyebrow center">Newsletter</span>
         <h2>Bleib informiert</h2>
         <p>Erhalte die neuesten Jaynetix News und Rabattaktionen direkt in dein Postfach.</p>
         <form id="newsForm" action="https://jaynetix.ch/" method="get">
@@ -435,7 +565,7 @@
             Entenweidstrasse 90<br>
             4056 Basel<br>
             Schweiz<br>
-            <a href="https://jaynetix.ch/?page_id=84" style="color:var(--accent)">Kontaktformular →</a>
+            <a href="https://jaynetix.ch/?page_id=84">Kontaktformular →</a>
           </address>
         </div>
       </div>
@@ -565,6 +695,20 @@
     connectStore();
 
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    // ── Mobile nav toggle ──────────────────────────────────────────────
+    const navToggle = document.getElementById("navToggle");
+    const mainNav = document.getElementById("mainNav");
+    if (navToggle && mainNav) {
+      navToggle.addEventListener("click", () => {
+        const open = mainNav.classList.toggle("open");
+        navToggle.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      mainNav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => {
+        mainNav.classList.remove("open");
+        navToggle.setAttribute("aria-expanded", "false");
+      }));
+    }
   </script>
 </body>
 </html>
