@@ -155,28 +155,6 @@
         linear-gradient(90deg, var(--bg) 0%, rgba(10,8,6,0.86) 30%, rgba(10,8,6,0.36) 56%, transparent 82%),
         linear-gradient(0deg, rgba(10,8,6,0.6), transparent 34%);
     }
-    /* Moody procedural smoke — feTurbulence, screen-blended over the dark hero */
-    .hero-smoke {
-      position: absolute; inset: 0; z-index: 2; pointer-events: none;
-      mix-blend-mode: screen; will-change: transform;
-    }
-    .smoke { position: absolute; display: block; }
-    .smoke-fog {
-      inset: -18%; width: 136%; height: 136%; opacity: .3;
-      animation: smokeDriftA 40s ease-in-out infinite alternate;
-    }
-    .smoke-plume {
-      right: -8%; top: -14%; width: 78%; height: 128%; opacity: .42;
-      animation: smokeDriftB 27s ease-in-out infinite alternate;
-    }
-    @keyframes smokeDriftA {
-      from { transform: translate3d(-2%, 0, 0) scale(1.04); }
-      to   { transform: translate3d(3%, -3%, 0) scale(1.16); }
-    }
-    @keyframes smokeDriftB {
-      from { transform: translate3d(0, 2%, 0) scale(1.02); }
-      to   { transform: translate3d(-5%, -6%, 0) scale(1.14); }
-    }
     .hero-inner { position: relative; z-index: 3; }
     .hero-copy { max-width: 32rem; padding: 5rem 0; }
     .hero-copy h1 {
@@ -448,7 +426,6 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .marquee-track { animation: none; }
-      .smoke { animation: none; }
     }
   </style>
 </head>
@@ -501,30 +478,9 @@
   <!-- Hero -->
   <div class="hero" data-cms-zone="hero">
     <div class="hero-media">
-      <img src="images/hero-cannabis-real.jpg" alt="Gefrostete Premium CBD Cannabis Blüte im goldenen Licht" loading="eager" decoding="async" fetchpriority="high">
+      <img src="images/hero-cannabis-rgb.jpg" alt="Premium CBD Cannabis Blüte mit dramatischem Rim-Licht und farbigem Bokeh" loading="eager" decoding="async" fetchpriority="high">
     </div>
     <div class="hero-scrim"></div>
-    <!-- Procedural moody smoke: faint full-hero fog + a denser plume near the bud -->
-    <div class="hero-smoke" aria-hidden="true">
-      <svg class="smoke smoke-fog" viewBox="0 0 600 600" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <filter id="smokeFog" x="-20%" y="-20%" width="140%" height="140%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="4" stitchTiles="stitch" result="n">
-            <animate attributeName="baseFrequency" dur="34s" values="0.011;0.016;0.011" repeatCount="indefinite"/>
-          </feTurbulence>
-          <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -1.1 0.95"/>
-        </filter>
-        <rect width="600" height="600" filter="url(#smokeFog)"/>
-      </svg>
-      <svg class="smoke smoke-plume" viewBox="0 0 400 700" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-        <filter id="smokePlume" x="-30%" y="-30%" width="160%" height="160%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.018 0.03" numOctaves="3" seed="11" stitchTiles="stitch" result="n">
-            <animate attributeName="baseFrequency" dur="22s" values="0.018 0.03;0.024 0.038;0.018 0.03" repeatCount="indefinite"/>
-          </feTurbulence>
-          <feColorMatrix in="n" type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -1.35 1.08"/>
-        </filter>
-        <rect width="400" height="700" filter="url(#smokePlume)"/>
-      </svg>
-    </div>
     <div class="hero-inner wrap">
       <div class="hero-copy">
         <span class="eyebrow">Schweizer CBD · Made in Basel</span>
@@ -863,18 +819,13 @@
     }
   </script>
 
-  <!-- ── Design-pass v2: scroll-reveal, hero parallax, smoke motion ── -->
+  <!-- ── Design-pass v2: scroll-reveal + hero parallax ── -->
   <script>
     (function () {
       var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      // Reduced motion → freeze the procedural smoke to a static wisp, skip the rest
-      if (reduce) {
-        document.querySelectorAll(".hero-smoke svg").forEach(function (svg) {
-          try { svg.pauseAnimations(); } catch (e) {}
-        });
-        return;
-      }
+      // Reduced motion → skip all scroll/parallax motion
+      if (reduce) return;
 
       // ── Scroll-reveal ────────────────────────────────────────────
       if ("IntersectionObserver" in window) {
@@ -917,17 +868,6 @@
         }, { passive: true });
       }
 
-      // ── Subtle pointer parallax on the smoke (desktop only) ──────
-      var smoke = document.querySelector(".hero-smoke");
-      var hero = document.querySelector(".hero");
-      if (smoke && hero && window.matchMedia("(pointer:fine)").matches) {
-        hero.addEventListener("pointermove", function (ev) {
-          var r = hero.getBoundingClientRect();
-          var dx = (ev.clientX - r.left) / r.width - 0.5;
-          var dy = (ev.clientY - r.top) / r.height - 0.5;
-          smoke.style.transform = "translate3d(" + (dx * 16).toFixed(1) + "px," + (dy * 12).toFixed(1) + "px,0)";
-        });
-      }
     })();
   </script>
 </body>
