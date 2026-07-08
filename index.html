@@ -173,7 +173,11 @@
 
     /* ── Marquee / ticker band (below hero, diagonal skew) ─────── */
     .marquee {
-      position: relative; z-index: 5; width: 100%;
+      position: relative; z-index: 5;
+      /* Wider than the viewport so the skewed band's vertical side-corners sit off-screen,
+         and pulled into the hero + trust so the tilted gold edges always have dark on both
+         sides (no triangular background gap at the corners). */
+      width: 116vw; margin: -2.8rem -8vw;
       transform: skewY(-2.2deg); transform-origin: center;
       background: linear-gradient(90deg, #160f08, #0e0a06 50%, #160f08);
       border-top: 3px solid rgba(201,163,78,.75); border-bottom: 3px solid rgba(201,163,78,.75);
