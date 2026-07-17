@@ -1,0 +1,15 @@
+{
+  "name": "Jaynetixch — Ecom Redesign",
+  "slug": "jaynetixch",
+  "description": "Redesign of the Jaynetix CBD shop homepage — black/gold/oxblood editorial theme, RGB-lit cannabis hero, tilted marquee, scroll effects. Static single-file site with live WooCommerce sync (Store API via Vercel proxy) against the production store at jaynetix.ch. Promotes to websites/ when it replaces the live WordPress site.",
+  "status": "active",
+  "owner": "Jamil",
+  "created": "2026-07-06",
+  "type": "static-site",
+  "entry": "index.html",
+  "stack": ["html", "css", "vanilla-js", "vercel-serverless"],
+  "brand": "Jaynetix",
+  "company": "That Sky Walker Enterprise",
+  "url": "https://jaynetixch.vercel.app",
+  "repo": "https://github.com/TSWE-network/jaynetix.ch"
+}

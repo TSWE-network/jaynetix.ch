@@ -2,6 +2,30 @@
 
 Newest entries on top.
 
+## 2026-07-17 — Relocated to projects/; websites/ keeps only the live-site placeholder
+
+**Type:** taxonomy / cleanup
+
+**Before:** This repo lived at `~/ai-workspace/websites/jaynetix.ch` and
+carried a `website.json`, so the in-progress redesign showed on Mission
+Control's **Websites** page as if it were the production site.
+
+**After:** Repo moved to `~/ai-workspace/projects/jaynetixch` with a
+`project.json` (name, status, url, repo) so it appears on the **Projects**
+page with its deploy URL. `website.json` removed from this repo.
+`~/ai-workspace/websites/jaynetix.ch` was recreated as a plain placeholder
+(website.json + placeholder index.html) describing only the live WordPress
+site at www.jaynetix.ch — no reference to this project.
+
+**Why:** Jay's folder taxonomy: `projects/` = active work, `websites/` =
+live production domains. A project is promoted to `websites/` only when
+finished, and must never be cross-linked into another entity's folder.
+This repo in `websites/` violated that and put the card on the wrong page.
+
+**Why written this way:** Physical move (not a link) keeps each folder
+self-describing; `.vercel/` moved with the repo so deploys keep targeting
+the same Vercel project (jaynetixch.vercel.app) from the new path.
+
 ## 2026-07-09 — Real-bud product images for flower bags + duplicate fix + snapshot sync
 
 **Type:** content / catalogue
