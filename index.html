@@ -145,7 +145,7 @@
     /* ── Hero ────────────────────────────────────────────────── */
     .hero {
       position: relative; min-height: min(92vh, 900px); display: flex; align-items: center;
-      overflow: hidden; border-bottom: 1px solid var(--border-soft); background: var(--bg);
+      overflow: hidden; background: var(--bg);
     }
     .hero-media { position: absolute; inset: 0; z-index: 0; }
     .hero-media img {
@@ -186,10 +186,11 @@
       border-top: 3px solid rgba(201,163,78,.75); border-bottom: 3px solid rgba(201,163,78,.75);
       overflow: hidden;
     }
-    .marquee-inner { padding: .9rem 0; overflow: hidden; }
+    .marquee-inner { padding: 1.5rem 0; overflow: hidden; }
     .marquee-track {
       display: inline-flex; flex-wrap: nowrap; white-space: nowrap; will-change: transform;
-      animation: marquee 28s linear infinite;
+      /* duration is recomputed by JS from the actual track width (constant px/s speed) */
+      animation: marquee 40s linear infinite;
     }
     .marquee:hover .marquee-track { animation-play-state: paused; }
     .marquee-item {
@@ -1111,6 +1112,43 @@
       window.addEventListener("resize", function () { measure(); sizeCanvas(); paint(); });
 
       measure(); sizeCanvas(); paint();
+    })();
+  </script>
+
+  <!-- ── Marquee: build a mathematically seamless loop ──
+       translateX(-50%) only loops without a jump when the track is exactly two
+       identical halves AND each half is at least as wide as the band. The static
+       markup ships 2 copies of the 8-item set; on wide screens that half is
+       narrower than the 116vw band, leaving blank track before the reset. This
+       rebuilds the track with enough copies for the current viewport and keeps
+       the scroll speed constant regardless of track length. -->
+  <script>
+    (function () {
+      var band = document.querySelector(".marquee");
+      var track = document.querySelector(".marquee-track");
+      if (!band || !track || track.children.length < 8) return;
+      var SET = 8;          // first 8 spans = one full message set
+      var SPEED = 55;       // px per second, constant across viewports
+      var setNodes = [].slice.call(track.children, 0, SET).map(function (el) { return el.cloneNode(true); });
+
+      function rebuild() {
+        var setW = 0;
+        // measure one set from the live track (first SET children are always one set)
+        for (var i = 0; i < SET; i++) setW += track.children[i].getBoundingClientRect().width;
+        if (!setW) return;
+        var copies = Math.max(2, Math.ceil(band.offsetWidth / setW));
+        var frag = document.createDocumentFragment();
+        for (var h = 0; h < 2; h++)
+          for (var c = 0; c < copies; c++)
+            setNodes.forEach(function (el) { frag.appendChild(el.cloneNode(true)); });
+        track.innerHTML = "";
+        track.appendChild(frag);
+        track.style.animationDuration = ((setW * copies) / SPEED).toFixed(2) + "s";
+      }
+
+      rebuild();
+      var t;
+      window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(rebuild, 200); });
     })();
   </script>
 

@@ -2,6 +2,33 @@
 
 Newest entries on top.
 
+## 2026-07-17 — Marquee: thicker band bridging the hero seam + mathematically seamless loop
+
+**Type:** design / bugfix
+
+**Before:** The hero had a 1px border-bottom that stayed visible beside the
+tilted band, and the band (padding .9rem) was too thin to bridge the
+hero-to-trust transition. The track shipped 2 static copies of the 8-item
+set animated with translateX(-50%); on viewports where half the track was
+narrower than the 116vw band, the reset exposed blank track and read as a
+jump (reported by Jay at desktop widths).
+
+**After:** Hero border-bottom removed (both adjacent surfaces are near-black,
+so no seam line exists to hide); band padding 1.5rem. A small script rebuilds
+the track at load/resize: it measures one item set, clones
+ceil(bandWidth / setWidth) copies per half, appends two identical halves,
+and sets animation-duration = halfWidth / 55px·s⁻¹. translateX(-50%) then
+always lands on identical pixels (seamless) and speed stays constant across
+viewports. Verified halfWidth ≥ bandWidth at 390/1440/1920 via Playwright,
+plus screenshots at the pre-wrap animation instant.
+
+**Why written this way:** A CSS-only fix would need enough static copies for
+the widest screen (6+ copies polluting the markup and slowing narrow
+viewports); measuring at runtime keeps markup at 2 copies (no-JS fallback
+still animates) and guarantees the invariant on any width. Duration derived
+from width keeps px/s constant so wide screens don't get a faster-feeling
+ticker.
+
 ## 2026-07-17 — Taste pass + original collection assets + fal.ai promo clip & scroll-driven growth scene
 
 **Type:** design / feature
