@@ -177,16 +177,19 @@
     /* ── Marquee / ticker band (below hero, diagonal skew) ─────── */
     .marquee {
       position: relative; z-index: 5;
-      /* Wider than the viewport so the skewed band's vertical side-corners sit off-screen.
-         Bleeds upward into the hero only; below, the trust section reserves its own
-         clearance (padding-top) so the tilted band never cuts into the banner boxes. */
-      width: 116vw; margin: -2.8rem -8vw 0;
+      /* Unskewed backdrop behind the tilted band: fades from the hero photo into
+         solid page background BEFORE the hero's bottom edge (2.2rem overlap), so
+         the seam can never peek out beside the tilted band at any viewport width.
+         Wider than the viewport so the band's side-corners sit off-screen. */
+      width: 116vw; margin: -2.2rem -8vw 0;
+      background: linear-gradient(180deg, rgba(10,8,6,0), var(--bg) 2.2rem);
+    }
+    .marquee-inner {
+      padding: 1.5rem 0; overflow: hidden;
       transform: skewY(-2.2deg); transform-origin: center;
       background: linear-gradient(90deg, #160f08, #0e0a06 50%, #160f08);
       border-top: 3px solid rgba(201,163,78,.75); border-bottom: 3px solid rgba(201,163,78,.75);
-      overflow: hidden;
     }
-    .marquee-inner { padding: 1.5rem 0; overflow: hidden; }
     .marquee-track {
       display: inline-flex; flex-wrap: nowrap; white-space: nowrap; will-change: transform;
       /* duration is recomputed by JS from the actual track width (constant px/s speed) */
@@ -401,17 +404,23 @@
     details.faq[open] summary::after { transform: rotate(45deg); }
     details.faq .ans { padding: 0 .4rem 1.5rem; color: var(--muted); font-size: 0.95rem; max-width: 68ch; }
 
-    /* ── Newsletter — charcoal band, leaf watermark, split layout ── */
+    /* ── Newsletter — original jaynetix.ch background: fixed-attachment leaf
+       photo with golden sparkles and the site's warm amber tint (#FBB10021),
+       plus a left-weighted dark scrim so the white copy stays readable. ── */
     .news-band {
       position: relative; background-color: var(--charcoal);
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cg fill='%23c9a34e' fill-opacity='0.05' stroke='%23c9a34e' stroke-opacity='0.05' transform='translate(75 126)'%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z'/%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z' transform='rotate(30) scale(0.82)'/%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z' transform='rotate(-30) scale(0.82)'/%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z' transform='rotate(58) scale(0.6)'/%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z' transform='rotate(-58) scale(0.6)'/%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z' transform='rotate(82) scale(0.4)'/%3E%3Cpath d='M0 0 L5 -22 L0 -62 L-5 -22 Z' transform='rotate(-82) scale(0.4)'/%3E%3Cpath d='M0 0 L0 16' stroke-width='2' fill='none'/%3E%3C/g%3E%3C/svg%3E");
-      background-size: 150px 150px; overflow: hidden;
+      background-image: url("assets/newsletter-bg.jpg");
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+      background-attachment: fixed;
+      overflow: hidden;
       padding: 4.5rem 0 2rem;
       clip-path: polygon(0 0, 100% 22px, 100% 100%, 0 100%);
     }
     .news-band::before {
       content: ""; position: absolute; inset: 0; pointer-events: none;
-      background: radial-gradient(90% 130% at 12% 0%, rgba(201,163,78,.08), transparent 55%);
+      background:
+        linear-gradient(rgba(251,177,0,.13), rgba(251,177,0,.13)),
+        linear-gradient(90deg, rgba(10,8,6,.72), rgba(10,8,6,.42) 55%, rgba(10,8,6,.3));
     }
     .news-grid {
       position: relative; display: grid; grid-template-columns: 1.05fr .95fr;

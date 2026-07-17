@@ -2,6 +2,36 @@
 
 Newest entries on top.
 
+## 2026-07-17 — Marquee corner gap closed with unskewed backdrop; newsletter gets the original site background
+
+**Type:** design / bugfix
+
+**Before:** The skew transform lived on the outer `.marquee` element, so its
+background tilted with the band; on the right (high) side of the tilt, the
+hero's bottom edge peeked out below the band as an exposed corner. The
+required clearance grows with viewport width (tan(2.2°) × 58vw), so any
+fixed padding/margin combination fails at some width. The newsletter band
+used a charcoal background with an inline-SVG leaf watermark.
+
+**After:** The skew, borders, and band gradient moved to `.marquee-inner`;
+the outer `.marquee` is now an unskewed 116vw backdrop with
+`linear-gradient(180deg, transparent, var(--bg) 2.2rem)` and `-2.2rem` top
+overlap. The gradient reaches solid page background exactly at the hero's
+bottom edge, so the seam is masked across the full width at every viewport
+size, independent of the tilt (also sits the band slightly lower, per Jay).
+The newsletter band now uses the original jaynetix.ch newsletter background
+(`2024/10/3.jpg`, scraped from post-89.css: leaf photo with golden sparkles)
+with the same effect as the live site: `background-size: cover` +
+`background-attachment: fixed` + the original warm amber overlay
+(#FBB100 at 13%), plus a left-weighted dark scrim so the white copy keeps
+WCAG-readable contrast. Angled clip-path top edge retained.
+
+**Why written this way:** Masking the seam with an unskewed gradient
+backdrop removes the viewport-width dependency entirely instead of chasing
+it with vw-based padding (which would have made the band ~120px tall on
+wide screens). The amber overlay value and attachment behavior are copied
+verbatim from the original Breakdance CSS rather than approximated.
+
 ## 2026-07-17 — Marquee: thicker band bridging the hero seam + mathematically seamless loop
 
 **Type:** design / bugfix
